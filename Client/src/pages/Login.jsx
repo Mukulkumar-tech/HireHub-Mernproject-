@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"
+import {toast} from 'react-hot-toast'
 
 const Login = () => {
   const [showPassword, setShowPassword] =
@@ -15,10 +17,16 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-
-    navigate("/home");
+  const onSubmit = async (data) => {
+   try {
+     const res= await axios.post("http://localhost:3000/api/user/login", data)
+    if(res.data.success){
+      toast.success(res.data.message);
+      navigate("/home");
+    }
+   } catch (error) {
+     toast.error(error.response.data.message);
+   }
   };
 
   return (

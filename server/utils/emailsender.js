@@ -1,10 +1,11 @@
 import nodemailer from 'nodemailer'
-
+import dotenv from 'dotenv';
+dotenv.config()
 
 // Create a transporter using SMTP
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
+  port: 587,
   secure: false, // use STARTTLS (upgrade connection to TLS after connecting)
   auth: {
     user: process.env.SMTP_USER,
@@ -12,12 +13,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendotpemail = (reciver,otp,emailtemplate)=>{
+export const sendotpemail = async(reciver,subject,emailtemplate)=>{
   try {
   const info = await transporter.sendMail({
     from:"mukulkumaruk08@gmail.com", // sender address
     to: reciver, // list of recipients
-    subject: "OTP Verificaton code ", // subject line
+    subject: subject, // subject line
     text: "Hello world?", // plain text body
     html:emailtemplate, // HTML body
   });

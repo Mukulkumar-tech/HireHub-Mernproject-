@@ -60,7 +60,7 @@ export  const otpemail = `<!DOCTYPE html>
                 <tr>
                   <td style="background-color:#f0f3ff;border:1.5px dashed #4f6ef7;border-radius:10px;padding:20px 24px;text-align:center;">
                     <p style="margin:0 0 10px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#4f6ef7;font-weight:600;">Your one-time code</p>
-                    <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:38px;font-weight:700;color:#1a1a2e;letter-spacing:12px;padding-left:12px;line-height:1;">{{otp_code}}</p>
+                    <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:38px;font-weight:700;color:#1a1a2e;letter-spacing:12px;padding-left:12px;line-height:1;">OTPCODE</p>
                     <p style="margin:10px 0 0;font-size:12px;color:#4f6ef7;">&#x23F1; Expires in 10 minutes</p>
                   </td>
                 </tr>

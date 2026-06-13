@@ -2,16 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
-const OTPModal = ({ isOpen, onClose }) => {
+import {toast} from 'react-hot-toast'
+import axios from 'axios'
+const OTPModal = () => {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const inputRefs = useRef([]);
   const navigate = useNavigate()
   useEffect(() => {
-    if (isOpen && inputRefs.current[0]) {
+    if (inputRefs.current[0]) {
       inputRefs.current[0].focus();
     }
-  }, [isOpen]);
+  }, []);
 
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return;
@@ -34,27 +35,33 @@ const OTPModal = ({ isOpen, onClose }) => {
       inputRefs.current[index - 1]?.focus();
     }
   };
-
-  const handleVerify = () => {
-    const otpValue = otp.join("");
-
-    if (otpValue.length !== 6) {
-      alert("Please enter complete OTP");
+  const handleVerify =async()=>{
+    try {
+      const otpvalue = otp.join("");
+    if(!otpvalue || otpvalue.length !== 6){
+      toast.error("Please enter a valid 6-digit OTP");
       return;
     }
+    const res= await axios.post("http://localhost:3000/api/user/verify-otp", {
+      otp: otpvalue,
+      email: localStorage.getItem("email"),
+    });
+    if(res.data.success){
+      toast.success(res.data.message);
+      localStorage.removeItem("email");
+      navigate("/home");
+    }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
 
-    console.log("OTP:", otpValue);
 
-    // API Call Here
-    // await axios.post("/api/verify-otp",{otp:otpValue})
 
-    onClose();
-    navigate('/home')
-  };
-
-  if (!isOpen) return null;
+ 
 
   return (
+    <div>
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
@@ -69,7 +76,7 @@ const OTPModal = ({ isOpen, onClose }) => {
           className="bg-slate-900 border border-slate-700 rounded-3xl p-8 w-full max-w-md text-white relative"
         >
           <button
-            onClick={onClose}
+            onClick={() => navigate("/")}
             className="absolute top-5 right-5 text-gray-400 hover:text-white"
           >
             <FaTimes />
@@ -120,7 +127,7 @@ const OTPModal = ({ isOpen, onClose }) => {
         </motion.div>
       </motion.div>
     </AnimatePresence>
-  );
+ </div> );
 };
 
 export default OTPModal;
